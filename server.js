@@ -55,28 +55,34 @@ let listCervejas = [
 
 
 server.get('/api/beers', function (req, res) {
+	console.log('get')
 	res.json(listCervejas);
 });
 
 server.get('/api/beer/:id', function (req, res) {
+	console.log('get', req.params.id)
 	var id = req.params.id;
 	var beer = listCervejas.find(x => x.id == id);
+	if (!beer)
+		res.json('nao encontrado').status(404)
 	res.json(beer);
 });
 
 server.delete('/api/beer/:id', function (req, res) {
+	console.log('delete', req.params.id)
 	var id = req.params.id;
-	
-	var cerveja = listCervejas.find(x => x.id == id);	
+
+	var cerveja = listCervejas.find(x => x.id == id);
 	const position = listCervejas.indexOf(cerveja);
 
 	listCervejas.pop(listCervejas.indexOf(cerveja))
-		
-	res.json(listCervejas); 
+
+	res.json(listCervejas);
 })
 
 server.post('/api/beer', function (req, res) {
-	
+	console.log('post', req.body)
+
 	let last = listCervejas[listCervejas.length - 1]
 
 	cerveja = {
@@ -89,11 +95,13 @@ server.post('/api/beer', function (req, res) {
 		"data": req.body.data,
 		"ranking": req.body.ranking
 	}
+	//console.log(cerveja)
 
 	listCervejas.push(cerveja)
-	
+
 	res.json(listCervejas);
 });
+
 
 server.listen(3000, function () {
 	console.log("NEW API - port " + 3000)
