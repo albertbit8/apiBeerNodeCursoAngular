@@ -6,6 +6,7 @@ server.use(bodyParser.urlencoded({ extended: false }))
 server.use(bodyParser.json())
 server.use(function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
@@ -78,6 +79,23 @@ server.delete('/api/beer/:id', function (req, res) {
 	listCervejas.pop(listCervejas.indexOf(cerveja))
 
 	res.json(listCervejas);
+})
+
+server.put('/api/beer/:id', function (req, res) {
+	console.log('put', req.params.id)
+	var id = req.params.id;
+
+	var cerveja = listCervejas.find(x => x.id == id);
+	
+	cerveja.data = req.body.data;
+	cerveja.familia = req.body.familia;
+	cerveja.foto = req.body.foto;
+	cerveja.litragem = req.body.litragem;
+	cerveja.nome = req.body.nome;
+	cerveja.preco = req.body.preco;
+	cerveja.ranking = req.body.ranking
+
+	res.json(cerveja)
 })
 
 server.post('/api/beer', function (req, res) {
